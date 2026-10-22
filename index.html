@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>1班 行動管理</title>
+<style>
+:root{--bg1:#cfe3ff;--bg2:#f4d9ff;--bg3:#d6fff0;--ink:#14161c;--sub:#5b6270;--glass:rgba(255,255,255,.52);--edge:rgba(255,255,255,.75);--hi:rgba(0,0,0,.06);--acc:#0a7cff;--ok:#1fa760;--warn:#e69a00;--bad:#e5384b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#0d1b3a;--bg2:#2a1245;--bg3:#07302b;--ink:#f1f3f8;--sub:#a3abbb;--glass:rgba(40,44,60,.5);--edge:rgba(255,255,255,.16);--hi:rgba(255,255,255,.07);--acc:#4aa3ff}}
+:root[data-theme="dark"]{--bg1:#0d1b3a;--bg2:#2a1245;--bg3:#07302b;--ink:#f1f3f8;--sub:#a3abbb;--glass:rgba(40,44,60,.5);--edge:rgba(255,255,255,.16);--hi:rgba(255,255,255,.07);--acc:#4aa3ff}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{font-family:-apple-system,"SF Pro Text","Hiragino Sans","Noto Sans JP",sans-serif;color:var(--ink);background:radial-gradient(60% 40% at 15% 10%,var(--bg1),transparent 70%),radial-gradient(60% 40% at 90% 30%,var(--bg2),transparent 70%),radial-gradient(70% 50% at 30% 95%,var(--bg3),transparent 70%),var(--bg1);background-attachment:fixed}
+main{max-width:520px;margin:0 auto;padding:14px 14px 40px}
+.g{background:var(--glass);-webkit-backdrop-filter:blur(16px) saturate(150%);backdrop-filter:blur(16px) saturate(150%);border:1px solid var(--edge);border-radius:28px;box-shadow:inset 0 1px 0 var(--edge),0 10px 30px rgba(20,30,60,.12);padding:18px;margin-bottom:12px}
+h1{font-size:15px;font-weight:600;margin:4px 6px 10px;color:var(--sub)}
+.lab{font-size:13px;color:var(--sub)}
+.big{font-size:clamp(52px,17vw,76px);font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.05;margin:4px 0}
+.st{font-size:14px;font-weight:600;border-radius:14px;padding:8px 12px;margin-top:8px;background:var(--hi)}
+.st.ok{color:var(--ok)}.st.warn{color:var(--warn)}.st.bad{color:var(--bad)}
+.bar{height:8px;border-radius:8px;background:var(--hi);overflow:hidden;margin-top:12px}
+.bar i{display:block;height:100%;width:0;background:var(--acc);border-radius:8px;transition:width .6s}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.two .g{margin:0}
+.nm{font-size:17px;font-weight:600;margin:4px 0 2px}
+.nt{font-size:12.5px;color:var(--sub);line-height:1.5}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+button{font:inherit;font-size:14px;font-weight:600;color:var(--ink);background:var(--hi);border:1px solid var(--edge);border-radius:999px;padding:9px 15px;cursor:pointer}
+button:active{transform:scale(.96)}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.it{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;padding:12px 4px;border-top:1px solid var(--hi)}
+.it:first-child{border-top:0}
+.it.cur{background:var(--hi);border-radius:18px;padding:12px;border:1px solid var(--edge)}
+.it.dn .nm,.it.dn .tm{text-decoration:line-through;opacity:.5}
+.tm{font-variant-numeric:tabular-nums;font-weight:700;font-size:15px;min-width:48px}
+.tm small{display:block;font-size:10.5px;color:var(--warn);font-weight:600}
+.it input[type=checkbox]{width:22px;height:22px;accent-color:var(--acc);margin:0 0 0 4px}
+.it .nm{font-size:15px;margin:0}
+.it .nt{grid-column:2}
+.it textarea{grid-column:2;width:100%;font:inherit;font-size:13px;color:var(--ink);background:var(--hi);border:1px solid var(--edge);border-radius:12px;padding:8px;resize:vertical;display:none}
+.it textarea.on{display:block}
+.fx{font-size:11px;color:var(--acc);font-weight:600}
+#hero{position:relative}
+.mn{position:absolute;top:12px;right:12px;width:36px;height:36px;padding:0;display:grid;place-items:center;font-size:18px}
+.mini{display:none;font-variant-numeric:tabular-nums;font-weight:700;font-size:15px}
+#hero.min{position:sticky;top:calc(env(safe-area-inset-top,0px) + 6px);z-index:5;padding:12px 60px 12px 18px;border-radius:999px}
+#hero.min .full{display:none}
+#hero.min .mini{display:block}
+#hero.min .mn{top:7px;right:8px}
+.big.b2{font-size:clamp(40px,13vw,58px);color:var(--acc)}
+#cc,#nxc{cursor:pointer}
+details.g summary{cursor:pointer;font-weight:600;font-size:15px}
+details.g ul{margin:10px 0 0;padding-left:18px;font-size:13px;line-height:1.7}
+details.g li{margin-bottom:6px}
+.src{color:var(--sub);font-size:11.5px}
+.ng{color:var(--warn);font-weight:600}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;border-radius:22px;margin-bottom:6px}
+.seg button{position:relative;z-index:1;border:0;border-radius:17px;background:transparent;padding:10px 6px;line-height:1.35;font-size:14px}
+.seg button.on{color:#fff}
+.seg small{display:block;font-weight:500;font-size:11px;opacity:.85}
+#sn{margin:0 8px 12px}
+:root{--k1:#79b4ff;--k2:#e1a0ff;--k3:#78efd0;--k4:#ffc99a;--gx:rgba(255,255,255,.74)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--k1:#1f56e0;--k2:#7b2bd6;--k3:#0e9b82;--k4:#c04b8f;--gx:rgba(28,32,46,.82)}}
+:root[data-theme="dark"]{--k1:#1f56e0;--k2:#7b2bd6;--k3:#0e9b82;--k4:#c04b8f;--gx:rgba(28,32,46,.82)}
+.bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:var(--bg1);pointer-events:none}
+.bg i{position:absolute;width:80vmax;height:80vmax;border-radius:50%;opacity:.8;will-change:transform}
+.bg i:nth-child(1){left:-25vmax;top:-20vmax;background:radial-gradient(closest-side,var(--k1),transparent);animation:d1 12s ease-in-out infinite}
+.bg i:nth-child(2){right:-30vmax;top:5vmax;background:radial-gradient(closest-side,var(--k2),transparent);animation:d2 15s ease-in-out infinite}
+.bg i:nth-child(3){left:-10vmax;bottom:-35vmax;background:radial-gradient(closest-side,var(--k3),transparent);animation:d3 18s ease-in-out infinite}
+.bg i:nth-child(4){right:-15vmax;bottom:-25vmax;background:radial-gradient(closest-side,var(--k4),transparent);animation:d4 13s ease-in-out infinite}
+.bg i:nth-child(5){left:30vmax;top:20vmax;width:55vmax;height:55vmax;background:radial-gradient(closest-side,var(--k4),transparent);animation:d2 9s ease-in-out infinite reverse}
+.bg i:nth-child(6){left:-5vmax;top:40vmax;width:55vmax;height:55vmax;background:radial-gradient(closest-side,var(--k2),transparent);animation:d4 11s ease-in-out infinite reverse}
+@keyframes d1{0%,100%{transform:translate3d(0,0,0) scale(1)}33%{transform:translate3d(45vmax,20vmax,0) scale(1.25)}66%{transform:translate3d(15vmax,45vmax,0) scale(.9)}}
+@keyframes d2{0%,100%{transform:translate3d(0,0,0) scale(1)}33%{transform:translate3d(-40vmax,30vmax,0) scale(.85)}66%{transform:translate3d(-15vmax,-20vmax,0) scale(1.2)}}
+@keyframes d3{0%,100%{transform:translate3d(0,0,0) scale(1)}33%{transform:translate3d(40vmax,-30vmax,0) scale(1.25)}66%{transform:translate3d(60vmax,-5vmax,0) scale(.9)}}
+@keyframes d4{0%,100%{transform:translate3d(0,0,0) scale(1)}33%{transform:translate3d(-45vmax,-25vmax,0) scale(1.1)}66%{transform:translate3d(-20vmax,-50vmax,0) scale(1.3)}}
+.g{background-image:linear-gradient(140deg,rgba(255,255,255,.28),rgba(255,255,255,0) 45%)}
+#ls,#tr{-webkit-backdrop-filter:none;backdrop-filter:none;background-color:var(--gx)}
+.seg{position:relative}
+.seg::before{content:"";position:absolute;top:5px;bottom:5px;left:5px;width:calc(50% - 8px);border-radius:17px;background:var(--acc);box-shadow:0 4px 14px rgba(10,124,255,.35);transition:transform .45s cubic-bezier(.3,1.35,.5,1)}
+.seg[data-sel="b"]::before{transform:translateX(calc(100% + 6px))}
+@keyframes lgIn{from{opacity:0;transform:translateY(6px) scale(.97)}to{opacity:1;transform:none}}
+.sw{animation:lgIn .45s cubic-bezier(.2,.9,.3,1)}
+.dt.on,.it textarea.on{animation:lgIn .3s ease-out}
+button{transition:transform .22s cubic-bezier(.3,1.5,.5,1)}
+button:active{transform:scale(.93)}
+@media (prefers-reduced-motion:reduce){.bg i,.sw,.dt.on,.it textarea.on{animation:none}.seg::before,button{transition:none}}
+.mr{font-size:12px;padding:3px 10px;margin-left:4px}
+.dt{grid-column:2;display:none;font-size:13px;line-height:1.6;background:var(--hi);border-radius:12px;padding:8px 10px}
+.dt.on{display:block}
+.ch{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.ch span{font-size:12px;border:1px solid var(--edge);border-radius:999px;padding:3px 9px}
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<main>
+<h1>1班 行動管理　地域の違いから考える：高架下は人が集まる商店街になれるのか</h1>
+
+<div class="g seg" id="seg">
+  <button type="button" data-p="a">通常プラン<small>町方 11:13発</small></button>
+  <button type="button" data-p="b">もしもプラン<small>1本遅らせる：町方 11:43発</small></button>
+</div>
+<div class="nt" id="sn"></div>
+<section class="g" id="hero">
+  <button id="mn" class="mn" type="button">－</button>
+  <div id="mini" class="mini"></div>
+  <div class="full">
+  <div class="lab" id="tl">帰りの電車まで</div>
+  <div class="big" id="cd">--:--:--</div>
+  <div class="lab" id="tt"></div>
+  <div class="bar"><i id="pg"></i></div>
+  <div class="lab" style="margin-top:14px">次の行動まで</div>
+  <div class="big b2" id="nc">--:--</div>
+  <div class="lab" id="nx"></div>
+  </div>
+</section>
+
+<div class="two">
+  <section class="g" id="cc"><div class="lab">いま（タップで詳細）</div><div class="nm" id="cn">-</div><div class="nt" id="cnt"></div></section>
+  <section class="g" id="nxc"><div class="lab">次（タップで詳細）</div><div class="nm" id="nn">-</div><div class="nt" id="nnt"></div></section>
+</div>
+
+<details class="g" id="tr" style="margin-top:12px">
+<summary>交通メモ（調べて確認できたものだけ）</summary>
+<ul>
+<li>町方駅は<b>2番線</b>から乗る（津島・弥富・名鉄名古屋方面）。1番線は名鉄一宮・玉ノ井方面。上下線でホームと改札が別で、連絡通路はない。<span class="src">（個人ブログ、2018年訪問。現地の案内を優先）</span></li>
+<li>町方→津島は隣の駅で約1分。<span class="src">（駅探）</span></li>
+<li>津島→名鉄名古屋は津島線・須ケ口経由の直通で約26分。<span class="src">（駅探・Yahoo!路線情報。時間帯で変わる）</span></li>
+<li>栄町→清水は名鉄瀬戸線で約3分、1駅（東大手）を挨む。清水の次が尼ケ坂。<span class="src">（駅探）</span></li>
+<li>栄町駅は地下駅で、栄駅（東山線・名城線）と乗換できる。<span class="src">（Wikipedia）</span></li>
+<li>瀬戸線は4両編成。<span class="src">（駅探の乗車位置表示）</span></li>
+<li>乗り遅れたとき：清水駅の栄町行きは、平日の昼は10分おきの時刻表。<span class="src">（駅探。尼ケ坂駅と当日の曜日は未確認）</span></li>
+<li><span class="ng">何両目に乗るか：確認できていません。</span>駅探の経路結果にある「乗車位置」を開くと「進行方向の先頭車両から○両目」と出る。乗る電車ごとに変わるので、当日の分を検索してください。</li>
+<li><span class="ng">要確認：</span>計画表は津島11:20着・11:30発、名鉄公式検索は11:13町方発→12:23清水着。もしも版の表も町方→津島は2分としていて、通常版の津島11:20着とは合いません。どちを信じるか、名鉄公式で確認を。</li>
+</ul>
+</details>
+<section class="g" id="ls"></section>
+<p class="nt" style="text-align:center">交通費：行き900円＋帰り930円＝1,830円／現地費用0円</p>
+</main>
+
+<script>
+// [開始分, 行動, 注意点, 発車固定]
+const PA=[
+[650,"学校を出発","学校→町方駅は徒歩10分想定。雨天・信号待ちを含め、急がず移動。"],
+[660,"町方駅へ到着目標","到着できなければ無理に走らない。駅構内で切符・ICチャージの準備。"],
+[670,"町方駅で乗車待ち・津島駅へ","チャージ／切符購入・トイレ・乗車位置を確認。名鉄公式では11:13町方発。"],
+[680,"津島駅到着・乗換準備","津島→清水の経路と乗換を確認。行きのIC運賃は900円。"],
+[690,"津島駅から清水駅方面へ出発目標","間に合わない場合は、現地滞在を短縮して帰りを優先。"],
+[740,"清水駅到着目標（公式12:23）","到着後トイレ・帰りの確認。"],
+[750,"SAKUMACHI商店街へ移動","駅から商店街までの所要時間、雨に濡れる区間を記録。"],
+[760,"清水駅側の高架下を観察","入口・高架・屋根・ベンチ・通路・電車音・店舗を記録。"],
+[770,"人通り調査（10分）","通過人数・滞在人数を数える。顔が分かる写真は撮らない。"],
+[780,"神乃氷の店舗・価格調査","購入せず、商品・価格・店の役割を調査。"],
+[800,"神乃氷の調査記録","発表用に見た目・価格・高校生の利用しやすさを記録。"],
+[810,"東甘堂を訪問・調査","芋スイーツ専門店。価格、専門性、店の入りやすさを調査。"],
+[830,"つばめパン＆Milkを訪問・調査","パンの価格・量・テイクアウト性・日常利用性を調査。購入しない。"],
+[850,"尼ケ坂駅方向へ移動開始","店舗間・高架下の雨天動線を確認。新規購入・寄り道なし。"],
+[870,"尼ケ坂駅到着・帰路準備","14:49発に備え、トイレ・IC残額・ホームを確認。"],
+[880,"尼ケ坂駅で乗車待ち","現地費用0円。"],
+[889,"尼ケ坂発（14:49）","14:49尼ケ坂→14:54栄町→15:00栄→15:05名古屋→15:13名鉄名古屋。",1],
+[930,"車内・乗換中に記録整理","津島15:39着、津島15:49発、町方15:50着の経路を確認。",1],
+[940,"津島駅到着見込み","NAVITIMEでは15:39着。町方方面の乗換を確認。",1],
+[950,"町方駅到着見込み","NAVITIMEでは15:50着。学校まで徒歩15分弱。",1],
+[970,"学校到着目標","16:45着席まで余裕を確保。",1],
+[1005,"着席期限（16:45）","遅延時は現地滞在を短縮し、14:10以降の駅移動を優先。",1]
+];
+
+// 詳細（行動計画表の記載だけを整理。表にない情報は入れていません）
+const XA={0:["徒歩約10分想定","雨天・信号待ちあり","急がず移動"],1:["走らない","切符・ICチャージの準備"],2:["チャージ／切符購入","トイレ","乗車位置の確認","2番線（津島・名鉄名古屋方面）から乗る","名鉄公式：11:13町方発"],3:["経路・乗換の確認","行きIC運賃900円"],4:["間に合わなければ現地滞在を短縮","帰りを優先"],5:["到着後トイレ","帰りの確認","名鉄公式：11:13町方発→12:23清水着"],6:["駅→商店街の所要時間を記録","雨に濡れる区間を記録"],7:["入口","高架","屋根","ベンチ","通路","電車音","店舗"],8:["通過人数","滞在人数","10分間","顔が分かる写真は撮らない"],9:["商品","価格","店の役割","購入しない（現地費用¥0）"],10:["見た目","価格","高校生の利用しやすさ","購入しない"],11:["価格","専門性（苋スイーツ専門店）","店の入りやすさ"],12:["価格","量","テイクアウト性","日常利用性","購入しない"],13:["店舗間・高架下の雨天動線","新規購入・寄り道なし"],14:["トイレ","IC残額","ホーム確認","14:49発に備える"],15:["交通費：行き900円＋帰り930円＝1,830円"],16:["14:49 尼ケ坂","14:54 栄町","15:00 栄","15:05 名古屋","15:13 名鉄名古屋","瀬戸線は4両編成","栄町→栄は乗換（地下で栄駅へ）"],17:["津島15:39着","津島15:49発","町方15:50着","津島→町方は隣駅で約1分"],18:["町方方面の乗換を確認"],19:["学校まで徒歩約15分弱"],20:["町方→学校 徒歩約15分弱","16:45着席"],21:["遅延時は現地滞在を短縮","14:10以降は駅移動を優先"]};   // 尼ケ坂発 / 尼ケ坂到着 / 着席期限 の行番号
+let S={delay:0,done:{},memo:{}};
+try{const r=localStorage.getItem("k1-plan");if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+const save=()=>{try{localStorage.setItem("k1-plan",JSON.stringify(S))}catch(e){}};
+const $=i=>document.getElementById(i);
+let CI=-1,NI=0;
+// もしもプラン（町方11:43発）。出典：1班_行動計画_行き1本遅れもしも版.xlsx
+const PB=[[675,"学校を出発（11:15）","学校→町方駅は徒歩約14～15分想定。雨天・信号待ちを含め、走らずに移動。"],[690,"町方駅へ到着（11:30頃）・チャージ・トイレ・乗車準備","11:30～11:35。ICの残額確認・チャージ・トイレを済ませる。"],[695,"ホームで待機（11:35～）","11:35～11:43。ホームと乗車位置を確認する。"],[703,"町方発（11:43）","名鉄尾西線 津島行。1本遅らせた場合の実際の発車時刻。"],[705,"津島着（11:45）","2分。11:47発の須ケ口方面へ乗換。乗換時間は2分。"],[707,"津島発（11:47）","名鉄津島線・尾西線 吉良吉田行。須ケ口ま〇16分。"],[723,"須ケ口着（12:03）","12:04発の名鉄名古屋方面へ乗換。乗換時間は1分なので、降車後すぐ移動。"],[724,"須ケ口発（12:04）","名鉄名古屋本線急行 豊橋行。"],[730,"名鉄名古屋着（12:10）","名古屋駅へ徒歩移動。混雑時は走らず、次の地下鉄を利用する。"],[737,"地下鉄名古屋発（12:17）","名古屋市営地下鉄東山線 藤が丘方面。"],[741,"栄着（12:21）","栄町駅まで徒歩移動。地下街・案内表示に従う。"],[746,"栄町着（12:26）","12:30発の名鉄瀬戸線に備えてホームへ移動。"],[750,"栄町発（12:30）","名鉄瀬戸線 尾張瀬戸行。清水まで3分。"],[753,"清水着（12:33）","実際の到着目安。トイレ・帰りの時刻・IC残額を確認。"],[760,"SAKUMACHI商店街へ移動","清水駅から商店街へ移動。雨に濡れる区間や駅からの距離を記録。"],[770,"清水駅側の高架下を観察","入口・高架・屋根・ベンチ・通路・電車音・店舗を記録。"],[780,"人通り調査・神乃氷の店舗調査","通過人数・滞在人数、商品・価格・店の役割を調査。顔が分かる写真は撮らない。"],[800,"神乃氷の調査記録","購入せず、見た目・価格・高校生の利用しやすさを記録。"],[810,"東甘堂を訪問・調査","苋スイーツ専門店。価格、専門性、店の入りやすさを調査。"],[830,"つばめパン＆Milkを訪問・調査","パンの価格・量・テイクアウト性・日常利用性を調査。購入しない。"],[850,"尼ケ坂駅方向へ移動開始","店舗間・高架下の雨天動線を確認。新規購入・寄り道なし。"],[870,"尼ケ坂駅到着・帰路準備","14:49発に備え、トイレ・IC残額・ホームを確認。"],[880,"尼ケ坂駅で乗車待ち","現地費用¥0。交通費は行き900円＋帰り930円＝1,830円。"],[889,"尼ケ坂発（14:49）","名鉄瀬戸線 栄町行。14:54栄町着、栄まで徒歩。",1],[900,"栄発（15:00）","名古屋市営地下鉄東山線 高畝方面。15:05名古屋着。",1],[905,"名古屋着・名鉄名古屋へ移動（15:05）","15:13発に備え、案内表示に従って移動。",1],[913,"名鉄名古屋発（15:13）","名鉄名古屋本線準急 佐屋行。津島まで直通。",1],[930,"車内で記録整理","15:39津島着、15:49発の町方方面へ乗換。",1],[939,"津島着（15:39）","町方方面のホームへ移動。",1],[949,"津島発（15:49）","名鉄尾西線 名鉄一宮行。",1],[950,"町方着（15:50）","学校まで徒歩約14～15分。雨天時は余裕を持って移動。",1],[965,"学校到着見込み","通常は16:05頃。雨天・信号待ちを含めても16:10頃を想定。",1],[1005,"着席期限（16:45）","1本遅い行きでも帰りの列車は変更しない。遅延時は14:10以降の駅移動を優先。",1]];
+const XB={0:["徒歩約14～15分想定","雨天・信号待ちあり","走らない"],1:["IC残額確認・チャージ","トイレ","乗車準備（11:30〜11:35）"],2:["ホームで待機（11:35〜11:43）","ホームと乗車位置を確認"],3:["尾西線 津島行","2番線（津島方面）から乗る"],4:["所要約2分","11:47発の須ケ口方面へ乗換","乗換時間は2分"],5:["吉良吉田行","須ケ口ま〇16分"],6:["12:04発の名鉄名古屋方面へ乗換","乗換時間は1分","降車後すぐ移動"],7:["名鉄名古屋本線 急行 豊橋行"],8:["名古屋駅へ徒歩","混雑時は走らず次の地下鉄を利用"],9:["東山線 藤が丘方面"],10:["栄町駅まで徒歩","地下街・案内表示に従う"],11:["12:30発の瀬戸線に備えてホームへ"],12:["瀬戸線 尾張瀬戸行","清水まで3分","瀬戸線は4両編成"],13:["トイレ","帰りの時刻確認","IC残額"],14:XA[6],15:XA[7],16:[...XA[8],...XA[9]],17:XA[10],18:XA[11],19:XA[12],20:XA[13],21:XA[14],22:XA[15],23:XA[16],24:["東山線 高畝方面","15:05名古屋着"],25:["15:13発に備え案内表示に従う"],26:["準急 佐屋行","津島まで直通"],27:XA[17],28:["町方方面のホームへ移動"],29:["尾西線 名鉄一宮行"],30:["学校まで徒歩約14～15分","雨天時は余裕を持つ"],31:["通常16:05頃","雨天でも16:10頃を想定"],32:XA[21]};
+const PLANS={a:{P:PA,X:XA,T:16,A:14,S:21,n:"町方11:13発（名鉄公式検索の例）"},b:{P:PB,X:XB,T:23,A:21,S:32,n:"町方11:13発に乗れず、11:43発を使う場合。帰りの電車は変更しない"}};
+let P,X,TRAIN,ARR,SEAT;
+const setPlan=()=>{const o=PLANS[S.plan]||PLANS.a;P=o.P;X=o.X;TRAIN=o.T;ARR=o.A;SEAT=o.S};setPlan();
+const mk=i=>S.plan==="b"?"b"+i:i;
+const openRow=i=>{const r=$("r"+i);if(!r)return;if(!r.querySelector(".dt").classList.contains("on"))r._tg();r.scrollIntoView({behavior:"smooth",block:"center"})};
+const eff=i=>P[i][0];
+const hm=m=>String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0");
+const fmt=s=>{s=Math.max(0,Math.floor(s));return String(Math.floor(s/3600)).padStart(2,"0")+":"+String(Math.floor(s%3600/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")};
+
+function build(){
+  $("ls").innerHTML="";
+  P.forEach((p,i)=>{
+    const d=document.createElement("div");d.className="it";d.id="r"+i;
+    d.innerHTML='<div class="tm"></div><div><span class="nm"></span> '+(p[3]?'<span class="fx">時刻固定</span>':'')+' <button class="mr" type="button">詳細</button></div><div class="nt"></div><div class="dt"></div><textarea rows="2" placeholder="メモ（人数・価格・気づき）"></textarea>';
+    const ta=d.querySelector("textarea");
+    d.querySelector(".nm").textContent=p[1];d.querySelector(".nt").textContent=p[2];
+    ta.value=S.memo[mk(i)]||"";
+    if(ta.value)ta.classList.add("on");
+    ta.oninput=()=>{S.memo[mk(i)]=ta.value;save()};
+    const dt=d.querySelector(".dt"),nx=P[i+1];
+    dt.innerHTML='<div>この行動：'+hm(p[0])+(nx?' 〜 '+hm(nx[0])+'（'+(nx[0]-p[0])+'分）':'')+'</div>'+(nx?'<div>次：'+nx[1]+'</div>':'')+(X[i]?'<div class="ch">'+X[i].map(s=>'<span>'+s+'</span>').join('')+'</div>':'');
+    const tg=()=>{ta.classList.toggle("on");dt.classList.toggle("on")};
+    d._tg=tg;d.querySelector(".nm").onclick=tg;d.querySelector(".mr").onclick=tg;
+    $("ls").appendChild(d);
+  });
+}
+
+function tick(){
+  const n=new Date(),sec=n.getHours()*3600+n.getMinutes()*60+n.getSeconds(),m=sec/60;
+  // 残り時間の対象
+  let tgt,lab;
+  if(m<P[TRAIN][0]){tgt=P[TRAIN][0];lab="帰りの電車（尼ケ坂 14:49発）まで";}
+  else if(m<P[SEAT][0]){tgt=P[SEAT][0];lab="着席期限（16:45）まで";}
+  else{tgt=null;lab="着席期限を過ぎました";}
+  $("tl").textContent=lab;
+  $("cd").textContent=tgt?fmt(tgt*60-sec):"00:00:00";
+  $("tt").textContent=tgt?"目標 "+hm(tgt):"";
+  // 進み具合
+  const a=P[0][0],b=P[SEAT][0];
+  $("pg").style.width=Math.min(100,Math.max(0,(m-a)/(b-a)*100))+"%";
+  // いま/次
+  let ci=-1;for(let i=0;i<P.length;i++)if(eff(i)<=m)ci=i;
+  const ni=ci+1;
+  if(ci<0){$("cn").textContent="出発前";$("cnt").textContent=hm(P[0][0])+"に学校を出発";}
+  else{$("cn").textContent=P[ci][1];$("cnt").textContent=hm(eff(ci))+" から　"+P[ci][2];}
+  CI=ci;NI=ni;
+  if(ni<P.length){$("nn").textContent=P[ni][1];$("nnt").textContent=hm(eff(ni))+"（あと"+Math.max(0,Math.ceil(eff(ni)-m))+"分）";
+    const rs=Math.max(0,eff(ni)*60-sec);$("nc").textContent=rs>=3600?fmt(rs):fmt(rs).slice(3);$("nx").textContent=P[ni][1]+"（"+hm(eff(ni))+"）";}
+  else{$("nn").textContent="終了";$("nnt").textContent="";$("nc").textContent="--:--";$("nx").textContent="";}
+  $("mini").textContent="電車まで "+(tgt?fmt(tgt*60-sec):"--")+"　次まで "+$("nc").textContent;
+  // 行の表示
+  P.forEach((p,i)=>{
+    const r=$("r"+i),e=eff(i);
+    r.classList.toggle("cur",i===ci);
+    r.querySelector(".tm").textContent=hm(e);
+  });
+}
+build();
+const sg=()=>{document.querySelectorAll("#seg button").forEach(b=>{const on=b.dataset.p===(S.plan==="b"?"b":"a");b.classList.toggle("on",on);b.setAttribute("aria-pressed",on)});$("seg").dataset.sel=S.plan==="b"?"b":"a";$("sn").textContent="表示中："+(PLANS[S.plan]||PLANS.a).n};
+document.querySelectorAll("#seg button").forEach(b=>b.onclick=()=>{S.plan=b.dataset.p;save();setPlan();build();sg();tick();["ls","hero"].forEach(id=>{const e=$(id);e.classList.remove("sw");void e.offsetWidth;e.classList.add("sw")})});
+sg();const ap=()=>{$("hero").classList.toggle("min",!!S.min);$("mn").textContent=S.min?"＋":"－";$("mn").setAttribute("aria-label",S.min?"カウントダウンを開く":"カウントダウンを最小化")};
+$("mn").onclick=()=>{S.min=!S.min;save();ap()};ap();
+$("cc").onclick=()=>openRow(Math.max(CI,0));
+$("nxc").onclick=()=>openRow(Math.min(NI,P.length-1));
+tick();setInterval(tick,1000);
+</script>
+</body>
+</html>
